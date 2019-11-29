@@ -14,6 +14,15 @@
 		EF258516238CCE6800971ADB /* PanViewApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EF258514238CCE6800971ADB /* PanViewApp.xcdatamodeld */; };
 		EF258518238CCE6900971ADB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EF258517238CCE6900971ADB /* Assets.xcassets */; };
 		EF25851B238CCE6900971ADB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF258519238CCE6900971ADB /* LaunchScreen.storyboard */; };
+		EF25852A238CD15000971ADB /* MenuOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF258529238CD15000971ADB /* MenuOption.swift */; };
+		EF25852C238CD16700971ADB /* MenuOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF25852B238CD16700971ADB /* MenuOptionCell.swift */; };
+		EF258531238CD17D00971ADB /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF25852D238CD17C00971ADB /* HomeController.swift */; };
+		EF258532238CD17D00971ADB /* ContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF25852E238CD17C00971ADB /* ContainerController.swift */; };
+		EF258533238CD17D00971ADB /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF25852F238CD17D00971ADB /* MenuController.swift */; };
+		EF258534238CD17D00971ADB /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF258530238CD17D00971ADB /* SettingsController.swift */; };
+		EF258536238CD18F00971ADB /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF258535238CD18F00971ADB /* Protocols.swift */; };
+		EF29B778238E1C0100EE4694 /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF29B777238E1C0100EE4694 /* ProfileController.swift */; };
+		EF2D4C0723902C1000A982E7 /* AddItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2D4C0623902C1000A982E7 /* AddItemController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +35,15 @@
 		EF258517238CCE6900971ADB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EF25851A238CCE6900971ADB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EF25851C238CCE6900971ADB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EF258529238CD15000971ADB /* MenuOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuOption.swift; sourceTree = "<group>"; };
+		EF25852B238CD16700971ADB /* MenuOptionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuOptionCell.swift; sourceTree = "<group>"; };
+		EF25852D238CD17C00971ADB /* HomeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
+		EF25852E238CD17C00971ADB /* ContainerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerController.swift; sourceTree = "<group>"; };
+		EF25852F238CD17D00971ADB /* MenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuController.swift; sourceTree = "<group>"; };
+		EF258530238CD17D00971ADB /* SettingsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
+		EF258535238CD18F00971ADB /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		EF29B777238E1C0100EE4694 /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
+		EF2D4C0623902C1000A982E7 /* AddItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +76,10 @@
 		EF25850A238CCE6800971ADB /* PanViewApp */ = {
 			isa = PBXGroup;
 			children = (
+				EF258528238CD10600971ADB /* Model */,
+				EF258527238CD0FF00971ADB /* View */,
+				EF258526238CD0FB00971ADB /* Controller */,
+				EF258525238CD0F800971ADB /* Util */,
 				EF25850B238CCE6800971ADB /* AppDelegate.swift */,
 				EF25850D238CCE6800971ADB /* SceneDelegate.swift */,
 				EF25850F238CCE6800971ADB /* ViewController.swift */,
@@ -68,6 +90,43 @@
 				EF258514238CCE6800971ADB /* PanViewApp.xcdatamodeld */,
 			);
 			path = PanViewApp;
+			sourceTree = "<group>";
+		};
+		EF258525238CD0F800971ADB /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				EF258535238CD18F00971ADB /* Protocols.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		EF258526238CD0FB00971ADB /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				EF25852E238CD17C00971ADB /* ContainerController.swift */,
+				EF25852D238CD17C00971ADB /* HomeController.swift */,
+				EF25852F238CD17D00971ADB /* MenuController.swift */,
+				EF258530238CD17D00971ADB /* SettingsController.swift */,
+				EF29B777238E1C0100EE4694 /* ProfileController.swift */,
+				EF2D4C0623902C1000A982E7 /* AddItemController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		EF258527238CD0FF00971ADB /* View */ = {
+			isa = PBXGroup;
+			children = (
+				EF25852B238CD16700971ADB /* MenuOptionCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		EF258528238CD10600971ADB /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				EF258529238CD15000971ADB /* MenuOption.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,9 +201,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				EF258510238CCE6800971ADB /* ViewController.swift in Sources */,
+				EF258533238CD17D00971ADB /* MenuController.swift in Sources */,
+				EF25852C238CD16700971ADB /* MenuOptionCell.swift in Sources */,
+				EF258536238CD18F00971ADB /* Protocols.swift in Sources */,
+				EF258531238CD17D00971ADB /* HomeController.swift in Sources */,
+				EF258532238CD17D00971ADB /* ContainerController.swift in Sources */,
 				EF25850C238CCE6800971ADB /* AppDelegate.swift in Sources */,
+				EF258534238CD17D00971ADB /* SettingsController.swift in Sources */,
 				EF258516238CCE6800971ADB /* PanViewApp.xcdatamodeld in Sources */,
+				EF25852A238CD15000971ADB /* MenuOption.swift in Sources */,
 				EF25850E238CCE6800971ADB /* SceneDelegate.swift in Sources */,
+				EF29B778238E1C0100EE4694 /* ProfileController.swift in Sources */,
+				EF2D4C0723902C1000A982E7 /* AddItemController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
