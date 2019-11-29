@@ -4,6 +4,9 @@
 //
 //  Created by Joel Gil on 11/28/19.
 //  Copyright © 2019 Joel Gil. All rights reserved.
+//  References: https://fluffy.es/store-image-coredata/
+//              https://theswiftdev.com/2019/01/30/picking-images-with-uiimagepickercontroller-in-swift-5/
+//              https://stackoverflow.com/questions/40342196/how-do-i-save-and-show-a-image-with-core-data-swift-3
 //
 
 import UIKit
@@ -28,6 +31,7 @@ var gender: String?
 class AddItemController: UIViewController{
     
     // MARK: - Properties
+    var fullItem: String?
     
     //Add ManagedObject Data Context
     let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -35,19 +39,19 @@ class AddItemController: UIViewController{
     var itemdb:NSManagedObject!
     
     let defaults: UserDefaults = UserDefaults.standard
-    
-    var captureSession = AVCaptureSession()
-    var previewLayer = AVCaptureVideoPreviewLayer()
-    var movieOutput = AVCaptureMovieFileOutput()
-    var videoCaptureDevice : AVCaptureDevice?
-    var videoView: UIView = {
-        let vi = UIView()
-        vi.layer.cornerRadius = 25
-        vi.layer.borderWidth = 2
-        return vi
-    }()
         
     var delegate: AddItemDelegate?
+    
+    let photoImageView: UIImageView = {
+           let iv = UIImageView()
+           iv.contentMode = .scaleAspectFill
+           iv.clipsToBounds = true
+           iv.translatesAutoresizingMaskIntoConstraints = false
+           //iv.image = #imageLiteral(resourceName: "thriftstore")
+           return iv
+    }()
+    
+    var imagePicker: ImagePicker!
     
     let txtCategory: UITextField = {
         let tf = UITextField()
@@ -74,10 +78,9 @@ class AddItemController: UIViewController{
         tf.layer.masksToBounds = true
         tf.layer.borderWidth = 0.5
         tf.translatesAutoresizingMaskIntoConstraints = false
-        //tf.isEditable = true
-        
         return tf
     }()
+    
     
     let lblCategory: UILabel = {
            let label = UILabel()
@@ -86,6 +89,14 @@ class AddItemController: UIViewController{
            label.translatesAutoresizingMaskIntoConstraints = false
            return label
        }()
+    
+    let lblStore: UILabel = {
+              let label = UILabel()
+              label.text = "Selected Store (Profile):"
+              label.font = UIFont.systemFont(ofSize: 16 )
+              label.translatesAutoresizingMaskIntoConstraints = false
+              return label
+      }()
     
     let lblSelectedStore: UILabel = {
         let label = UILabel()
@@ -111,6 +122,14 @@ class AddItemController: UIViewController{
            return label
        }()
     
+    let btnTakePhoto: UIButton = {
+        let btn = UIButton()
+        btn.setTitle("Pick Image", for: .normal)
+        btn.setTitleColor(UIColor.systemBlue, for: UIControl.State.normal)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
+    }()
+    
     // MARK: - Init
     
     override func viewDidLoad() {
@@ -126,41 +145,73 @@ class AddItemController: UIViewController{
         view.addSubview(lblSubCategory)
         view.addSubview(lblNote)
         view.addSubview(lblSelectedStore)
-            
-
-        lblSelectedStore.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        lblSelectedStore.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -300).isActive = true
+        view.addSubview(lblStore)
+        view.addSubview(photoImageView)
+        view.addSubview(btnTakePhoto)
+        
+        lblStore.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -85).isActive = true
+        lblStore.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -320).isActive = true
+        
+        lblSelectedStore.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -25).isActive = true
+        lblSelectedStore.centerYAnchor.constraint(equalTo: lblStore.centerYAnchor, constant: 20).isActive = true
         
         lblCategory.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -138).isActive = true
-        lblCategory.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -120).isActive = true
+        lblCategory.centerYAnchor.constraint(equalTo: lblSelectedStore.centerYAnchor, constant: 30).isActive = true
                
         txtCategory.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        txtCategory.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -100 ).isActive = true
+        txtCategory.centerYAnchor.constraint(equalTo: lblCategory.centerYAnchor, constant: 20 ).isActive = true
         txtCategory.widthAnchor.constraint(equalToConstant: view.frame.width - 64).isActive = true
-        //txtCategory.inputView =
                
         lblSubCategory.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -122).isActive = true
-        lblSubCategory.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -70).isActive = true
+        lblSubCategory.centerYAnchor.constraint(equalTo: txtCategory.centerYAnchor, constant: 30).isActive = true
                
         txtSubCategory.centerXAnchor.constraint(equalTo: view.centerXAnchor ).isActive = true
-        txtSubCategory.centerYAnchor.constraint(equalTo:  view.centerYAnchor , constant: -50).isActive = true
+        txtSubCategory.centerYAnchor.constraint(equalTo:  lblSubCategory.centerYAnchor , constant: 20).isActive = true
         txtSubCategory.widthAnchor.constraint(equalToConstant: view.frame.width - 64).isActive = true
                
         lblNote.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -138).isActive = true
-        lblNote.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -20).isActive = true
+        lblNote.centerYAnchor.constraint(equalTo: txtSubCategory.centerYAnchor, constant: 30).isActive = true
                
         txtNote.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        txtNote.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        txtNote.centerYAnchor.constraint(equalTo: lblNote.centerYAnchor, constant: 20).isActive = true
         txtNote.widthAnchor.constraint(equalToConstant: view.frame.width - 64).isActive = true
-                
-        txtCategory.becomeFirstResponder()
+        
+        btnTakePhoto.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -128).isActive = true
+        btnTakePhoto.centerYAnchor.constraint(equalTo: txtNote.centerYAnchor, constant: 40).isActive = true
+        btnTakePhoto.widthAnchor.constraint(equalToConstant: view.frame.width - 64).isActive = true
+        btnTakePhoto.addTarget(self, action: #selector(buttonClicked), for: .touchUpInside)
+        
+        photoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
+        photoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 50).isActive = true
+        photoImageView.widthAnchor.constraint(equalToConstant: 250).isActive = true
+        photoImageView.heightAnchor.constraint(equalToConstant: 250).isActive = true
+        photoImageView.widthAnchor.constraint(equalToConstant: view.frame.width - 64).isActive = true
+        
+        self.imagePicker = ImagePicker(presentationController: self, delegate: self)
+        
         
         if defaults.string(forKey: "store") != nil{
             let _store = UserDefaults.standard.value(forKey: "store")!
             print(_store)
             lblSelectedStore.text = "\(_store) "
         }
-        //avCaptureVideoSetUp()
+        
+        if let fullItem = fullItem {
+            print("fullItem is \(fullItem)")
+            
+            if fullItem.contains("No"){
+                txtCategory.text = categories[0]
+                txtCategory.isEnabled = false
+                txtSubCategory.text = subCategories[0]
+                txtSubCategory.isEnabled = false
+                txtNote.becomeFirstResponder()
+            } else {
+                txtCategory.becomeFirstResponder()
+            }
+        } else {
+            print("fullItem not found..")
+            txtCategory.becomeFirstResponder()
+        }
         
     }
     
@@ -169,86 +220,15 @@ class AddItemController: UIViewController{
         
         view.backgroundColor = .white
         
-        self.navigationItem.rightBarButtonItems = [ UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(handleDone)),
-                                                    UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.camera, target: self, action: #selector(handleVideo))]
+        self.navigationItem.rightBarButtonItems = [ UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(handleDone))]
         self.navigationItem.title = "Add an Item"
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(handleCancel))
+        //UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.camera, target: self, action: #selector(handleVideo))
        
     }
     
     // MARK: - Video Capture
-    func avCaptureVideoSetUp(){
-        if let devices = AVCaptureDevice.devices(for: AVMediaType.video) as? [AVCaptureDevice] {
-            for device in devices {
-                if device.hasMediaType(AVMediaType.video) {
-                    if device .position == AVCaptureDevice.Position.back{
-                        videoCaptureDevice = device
-                    }
-                }
-            }
-            
-            if videoCaptureDevice != nil {
-                
-                // Get an instance of the AVCaptureDevice class to initialize a device object and provide the video as the media type parameter.
-                if let captureDevice = AVCaptureDevice.default(for: AVMediaType.video) {
-
-                    do {
-                        // Get an instance of the AVCaptureDeviceInput class using the previous device object.
-                        let input = try AVCaptureDeviceInput(device: captureDevice)
-
-                        // Set the input device on the capture session.
-                        captureSession.addInput(input)
-
-                        // Initialize a AVCaptureVideoDataOutput object and set it as the output device to the capture session.
-                        let dataOutput = AVCaptureVideoDataOutput()
-                        dataOutput.videoSettings = [(kCVPixelBufferPixelFormatTypeKey as NSString): NSNumber(value: kCVPixelFormatType_32BGRA)] as [String : Any]
-
-                        dataOutput.alwaysDiscardsLateVideoFrames = true
-
-                        if captureSession.canAddOutput(dataOutput) {
-                            captureSession.addOutput(dataOutput)
-                        }
-
-                        // Initialize the video preview layer and add it as a sublayer to the viewPreview view's layer.
-                        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-                        previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-                        previewLayer.frame = self.view.layer.bounds // It may be best to setup an UIView outlet instead of using self.view
-                        self.view.layer.addSublayer(previewLayer)
-
-                        // Start video capture.
-                        captureSession.startRunning()
-
-                    } catch {
-                        // If any error occurs, simply print it out and don't continue any more.
-                        print(error)
-                        return
-                    }
-                }
-                
-                /*
-                do {
-                    // Add Video Input
-                    try self.captureSession.addInput(AVCaptureDeviceInput(device: videoCaptureDevice! ))
-                    // Get Audio Device
-                    guard let audioInput = AVCaptureDevice.default(for: AVMediaType.video) else { return <#default value#> }
-                    //Add Audio Input
-                    try self.captureSession.addInput(AVCaptureDeviceInput(device: audioInput))
-                    self.previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
-                    previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-                    previewLayer.connection?.videoOrientation = AVCaptureVideoOrientation.portrait
-                    self.videoView.layer.addSublayer(self.previewLayer)
-                
-                    //Add File Output
-                    self.captureSession.addOutput(self.movieOutput)
-                    captureSession.startRunning()
-                }catch {
-                    print(error)
-                }
-                */
-            }
-            
-        }
-    }
+   
     
     // MARK: - Selectors
     
@@ -282,17 +262,23 @@ class AddItemController: UIViewController{
            let item = Item(entity: entityDescription!,
                                  insertInto: managedObjectContext)
            
+           let imageData = photoImageView.image
+           let imgData = imageData!.jpegData(compressionQuality: 1)
+            
            item.category = txtCategory.text!
            item.subcategory = txtSubCategory.text!
            item.note = txtNote.text!
            item.status = true
            item.store = _store as? String
            item.createdat = Date()
+           item.video = imgData
        }
         
         var error: NSError?
         do {
            try managedObjectContext.save()
+           NotificationCenter.default.post(name: NSNotification.Name(rawValue: "load"), object: nil)
+            
         } catch let error1 as NSError {
            error = error1
            print("\(error)")
@@ -305,46 +291,22 @@ class AddItemController: UIViewController{
         self.dismiss(animated: true, completion: nil)
     }
     
+    @objc func buttonClicked(_ sender: UIButton) {
+        print("Button Clicked!")
+        self.imagePicker.present(from: sender)
+    }
+    
     @objc func handleVideo() {
         //self.dismiss(animated: true, completion: nil)
         print("record the video...")
-        
-        if movieOutput.isRecording {
-            movieOutput.stopRecording()
-        } else {
-            let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-            let fileUrl = paths[0].appendingPathComponent("output.mov")
-            try? FileManager.default.removeItem(at: fileUrl)
-            movieOutput.startRecording(to: fileUrl, recordingDelegate: self as AVCaptureFileOutputRecordingDelegate)
-        }
-        
     }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        let bounds: CGRect = videoView.layer.bounds
-        
-        previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-        previewLayer.bounds = bounds
-        previewLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
-    }
-    
+   
 }
 
-// MARK: — AVCaptureFileOutputRecordingDelegate
- 
-extension AddItemController : AVCaptureFileOutputRecordingDelegate {
-    func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
-        // save video to camera roll
-        if error == nil {
-            UISaveVideoAtPathToSavedPhotosAlbum(outputFileURL.path, nil, nil, nil)
-        }
-    }
-    
-    func capture(_ captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAt outputFileURL: URL!, fromConnections connections: [Any]!, error: Error!){
-        // save video to camera roll
-        if error == nil {
-        UISaveVideoAtPathToSavedPhotosAlbum(outputFileURL.path, nil, nil, nil)
-        }
+// MARK: — ImagePickerDelegate
+extension AddItemController: ImagePickerDelegate {
+
+    func didSelect(image: UIImage?) {
+        self.photoImageView.image = image
     }
 }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EF0D012A239143AB0095DCD3 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF0D0129239143AB0095DCD3 /* ImagePicker.swift */; };
+		EF0D012C23918D440095DCD3 /* ItemOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF0D012B23918D440095DCD3 /* ItemOptionCell.swift */; };
 		EF25850C238CCE6800971ADB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF25850B238CCE6800971ADB /* AppDelegate.swift */; };
 		EF25850E238CCE6800971ADB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF25850D238CCE6800971ADB /* SceneDelegate.swift */; };
 		EF258510238CCE6800971ADB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF25850F238CCE6800971ADB /* ViewController.swift */; };
@@ -26,6 +28,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EF0D0129239143AB0095DCD3 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		EF0D012B23918D440095DCD3 /* ItemOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemOptionCell.swift; sourceTree = "<group>"; };
 		EF258508238CCE6800971ADB /* PanViewApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PanViewApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF25850B238CCE6800971ADB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EF25850D238CCE6800971ADB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -109,6 +113,7 @@
 				EF258530238CD17D00971ADB /* SettingsController.swift */,
 				EF29B777238E1C0100EE4694 /* ProfileController.swift */,
 				EF2D4C0623902C1000A982E7 /* AddItemController.swift */,
+				EF0D0129239143AB0095DCD3 /* ImagePicker.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -117,6 +122,7 @@
 			isa = PBXGroup;
 			children = (
 				EF25852B238CD16700971ADB /* MenuOptionCell.swift */,
+				EF0D012B23918D440095DCD3 /* ItemOptionCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -203,6 +209,8 @@
 				EF258510238CCE6800971ADB /* ViewController.swift in Sources */,
 				EF258533238CD17D00971ADB /* MenuController.swift in Sources */,
 				EF25852C238CD16700971ADB /* MenuOptionCell.swift in Sources */,
+				EF0D012A239143AB0095DCD3 /* ImagePicker.swift in Sources */,
+				EF0D012C23918D440095DCD3 /* ItemOptionCell.swift in Sources */,
 				EF258536238CD18F00971ADB /* Protocols.swift in Sources */,
 				EF258531238CD17D00971ADB /* HomeController.swift in Sources */,
 				EF258532238CD17D00971ADB /* ContainerController.swift in Sources */,

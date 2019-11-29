@@ -47,7 +47,7 @@ class ProfileController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     
     // MARK: - Properties
     
-        let profileImageView: UIImageView = {
+     let profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true

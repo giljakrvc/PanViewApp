@@ -10,6 +10,8 @@ import UIKit
 import CoreData
 
 private let reuseIdentifier = "Cell"
+private let reuseItemIdentifer = "ItemOptionCell"
+var tableView: UITableView!
 
 class HomeController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate  {
     
@@ -36,6 +38,8 @@ class HomeController: UITableViewController, UISearchResultsUpdating, UISearchBa
         
         view.backgroundColor = .white
         configureNavigationBar()
+        //configureItemTableView()  //TODO: Fix the exception later on.
+        NotificationCenter.default.addObserver(self, selector: #selector(loaddb), name: NSNotification.Name(rawValue: "load"), object: nil)
     }
     
     // MARK: - viewDidAppear
@@ -49,36 +53,77 @@ class HomeController: UITableViewController, UISearchResultsUpdating, UISearchBa
     }
     
     // MARK: - UITableView
-      override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
          if (self.resultSearchController.isActive) {
              return filteredTableData.count
          }
          else {
              return itemArray.count
          }
-      }
+     }
       
       override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
                  
           if (self.resultSearchController.isActive) {
-              let cell =
-                  tableView.dequeueReusableCell(withIdentifier: "Cell")
-                      as UITableViewCell?
+              let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as UITableViewCell?
               let _item = filteredTableData[(indexPath as NSIndexPath).row]
               cell?.textLabel?.text = _item.value(forKey: "note") as! String?
               cell?.detailTextLabel?.text = ">>"
+            
               cell?.imageView?.image = storeImageView.image
+            
+              if let imageData = _item.value(forKey: "video") as? NSData {
+                   if let image = UIImage(data:imageData as Data) as? UIImage {
+                    cell?.imageView?.image = image                    
+                   }
+              }            
+              
               return cell!
           }
           else {
-              let cell =
-                  tableView.dequeueReusableCell(withIdentifier: "Cell")
-                      as UITableViewCell?
-              let _item = itemArray[(indexPath as NSIndexPath).row]
-              cell?.textLabel?.text = _item.value(forKey: "note") as! String?
-              cell?.detailTextLabel?.text = ">>"
-              cell?.imageView?.image = storeImageView.image
-              return cell!
+            
+            //
+            //let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! ItemOptionCell?
+            let _item = itemArray[(indexPath as NSIndexPath).row]
+            
+            //Old: using default ViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! UITableViewCell?
+            cell?.textLabel?.text = _item.value(forKey: "note") as! String?
+            cell?.detailTextLabel?.text = ">>"
+            
+            cell?.imageView?.image = storeImageView.image
+            
+            if let imageData = _item.value(forKey: "video") as? NSData {
+                if let image = UIImage(data:imageData as Data) as? UIImage {
+                    cell?.imageView?.image = image
+                }
+            }
+         
+            if let photoinData = _item.value(forKey: "video") as? UIImage{
+              print("setting image to imageView...")
+              //cell?.imageView?.image =  photoinData
+            }
+            
+            
+            //New
+            /*
+             let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ItemOptionCell
+            cell.titleLabel.text = _item.value(forKey: "note") as! String?
+            cell.descriptionLabel.text = _item.value(forKey: "store") as! String?
+            //cell?.detailTextLabel?.text = ">>"
+                       
+            cell.imageView?.image = storeImageView.image
+                       
+            if let imageData = _item.value(forKey: "video") as? NSData {
+               if let image = UIImage(data:imageData as Data) as? UIImage {
+                cell.pictureImageView.image = image
+               }
+            }
+            return cell
+            */
+ 
+            
+            return cell!
           }
           
       }
@@ -112,9 +157,32 @@ class HomeController: UITableViewController, UISearchResultsUpdating, UISearchBa
     
     @objc func handleNewItem() {
         let controller = AddItemController()
+        controller.fullItem = "No"
         present(UINavigationController(rootViewController: controller), animated: true, completion: nil)
+        
+        //refresh tableView
+        print("refreshing data afeter saving new item")
+        loaddb()
     }
     
+    //MARK: Configure General elements
+    func configureItemTableView() {
+        tableView = UITableView()
+        //tableView.delegate = self
+        //tableView.dataSource = self
+        
+        tableView.register(ItemOptionCell.self, forCellReuseIdentifier: reuseIdentifier)
+        //tableView.backgroundColor = .darkGray
+        //tableView.separatorStyle = .none
+        //tableView.rowHeight = 80
+        
+        view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+    }
     
     func configureNavigationBar() {
         navigationController?.navigationBar.barTintColor = .darkGray
@@ -123,25 +191,29 @@ class HomeController: UITableViewController, UISearchResultsUpdating, UISearchBa
         navigationItem.title = "Welcome!"
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "ic_menu_white_3x").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleMenuToggle))
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "icons8-mobile-order-50").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleNewItem))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "icons8-add-64").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleNewItem))
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.tableFooterView = UIView(frame: .zero)
     }
     
-    func loaddb()
+    @objc func loaddb()
        {
            let managedContext = (UIApplication.shared.delegate
                as! AppDelegate).persistentContainer.viewContext
            
            //let fetchRequest = NSFetchRequest(entityName:"Contact")
            let fetchRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Item")
+           let sort = NSSortDescriptor(key: "createdat", ascending: false)
+           fetchRequest.sortDescriptors = [sort]
            
+           //print(NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true).last!);
+
            do {
                let fetchedResults = try managedContext.fetch(fetchRequest) as? [NSManagedObject]
                if let results = fetchedResults {
                    itemArray = results
-                   //tableView.reloadData()
+                   self.tableView.reloadData()
                } else {
                    print("Could not fetch")
                }

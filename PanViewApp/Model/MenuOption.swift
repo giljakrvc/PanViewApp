@@ -18,7 +18,7 @@ enum MenuOption: Int, CustomStringConvertible {
         switch self {
         case .Profile: return "Profile"
         //case .Inbox: return "Inbox"
-        case .AddBlast: return "Add Blast"
+        case .AddBlast: return "Add Item"
         case .Settings: return "About me"
         }
     }

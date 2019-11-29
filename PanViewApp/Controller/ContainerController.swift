@@ -92,6 +92,7 @@ class ContainerController: UIViewController {
         case .AddBlast:
             print("Add New Blast!")
             let controller = AddItemController()
+            controller.fullItem = "yes"
             present(UINavigationController(rootViewController: controller), animated: true, completion: nil)
         case .Settings:
             print("About me...")
