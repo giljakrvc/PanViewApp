@@ -10,8 +10,8 @@ import UIKit
 import CoreData
 
 private let reuseIdentifier = "Cell"
-private let reuseItemIdentifer = "ItemOptionCell"
-var tableView: UITableView!
+private let reuseItemIdentifier = "ItemOptionCell"
+var itemsTableView: UITableView!
 
 class HomeController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate  {
     
@@ -38,7 +38,7 @@ class HomeController: UITableViewController, UISearchResultsUpdating, UISearchBa
         
         view.backgroundColor = .white
         configureNavigationBar()
-        //configureItemTableView()  //TODO: Fix the exception later on.
+        configureItemTableView()  //TODO: Fix the exception later on.
         NotificationCenter.default.addObserver(self, selector: #selector(loaddb), name: NSNotification.Name(rawValue: "load"), object: nil)
     }
     
@@ -64,55 +64,16 @@ class HomeController: UITableViewController, UISearchResultsUpdating, UISearchBa
       
       override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
                  
-          if (self.resultSearchController.isActive) {
-              let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as UITableViewCell?
-              let _item = filteredTableData[(indexPath as NSIndexPath).row]
-              cell?.textLabel?.text = _item.value(forKey: "note") as! String?
-              cell?.detailTextLabel?.text = ">>"
+          if (self.resultSearchController.isActive) {           
             
-              cell?.imageView?.image = storeImageView.image
-            
-              if let imageData = _item.value(forKey: "video") as? NSData {
-                   if let image = UIImage(data:imageData as Data) as? UIImage {
-                    cell?.imageView?.image = image                    
-                   }
-              }            
-              
-              return cell!
-          }
-          else {
-            
-            //
-            //let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! ItemOptionCell?
-            let _item = itemArray[(indexPath as NSIndexPath).row]
-            
-            //Old: using default ViewCell
-            let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! UITableViewCell?
-            cell?.textLabel?.text = _item.value(forKey: "note") as! String?
-            cell?.detailTextLabel?.text = ">>"
-            
-            cell?.imageView?.image = storeImageView.image
-            
-            if let imageData = _item.value(forKey: "video") as? NSData {
-                if let image = UIImage(data:imageData as Data) as? UIImage {
-                    cell?.imageView?.image = image
-                }
-            }
-         
-            if let photoinData = _item.value(forKey: "video") as? UIImage{
-              print("setting image to imageView...")
-              //cell?.imageView?.image =  photoinData
-            }
-            
-            
-            //New
-            /*
-             let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ItemOptionCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: reuseItemIdentifier, for: indexPath) as! ItemOptionCell
+            let _item = filteredTableData[(indexPath as NSIndexPath).row]
             cell.titleLabel.text = _item.value(forKey: "note") as! String?
             cell.descriptionLabel.text = _item.value(forKey: "store") as! String?
-            //cell?.detailTextLabel?.text = ">>"
-                       
-            cell.imageView?.image = storeImageView.image
+            let _cat = _item.value(forKey: "category") as! String?
+            cell.categoryLabel.text = _cat
+
+            cell.pictureImageView.image = storeImageView.image
                        
             if let imageData = _item.value(forKey: "video") as? NSData {
                if let image = UIImage(data:imageData as Data) as? UIImage {
@@ -120,10 +81,32 @@ class HomeController: UITableViewController, UISearchResultsUpdating, UISearchBa
                }
             }
             return cell
-            */
- 
+
+          }
+          else {
             
-            return cell!
+            //
+            //let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! ItemOptionCell?
+            let _item = itemArray[(indexPath as NSIndexPath).row]
+
+            //New
+            let cell = tableView.dequeueReusableCell(withIdentifier: reuseItemIdentifier, for: indexPath) as! ItemOptionCell
+            cell.titleLabel.text = _item.value(forKey: "note") as! String?
+            cell.descriptionLabel.text = _item.value(forKey: "store") as! String?
+            let _cat = _item.value(forKey: "category") as! String?
+            let _sub = _item.value(forKey: "subcategory") as! String?
+            cell.categoryLabel.text = _cat
+
+            cell.pictureImageView.image = storeImageView.image
+                       
+            if let imageData = _item.value(forKey: "video") as? NSData {
+               if let image = UIImage(data:imageData as Data) as? UIImage {
+                cell.pictureImageView.image = image
+               }
+            }
+            return cell
+            //
+            
           }
           
       }
@@ -137,7 +120,8 @@ class HomeController: UITableViewController, UISearchResultsUpdating, UISearchBa
           // Return false if you do not want the specified item to be editable.
           return false
       }
-      
+  
+     
       // MARK: - Search
       func updateSearchResults(for searchController: UISearchController){
              filteredTableData.removeAll(keepingCapacity: false)
@@ -167,21 +151,21 @@ class HomeController: UITableViewController, UISearchResultsUpdating, UISearchBa
     
     //MARK: Configure General elements
     func configureItemTableView() {
-        tableView = UITableView()
-        //tableView.delegate = self
-        //tableView.dataSource = self
+        itemsTableView = UITableView()
+        itemsTableView.delegate = self
+        itemsTableView.dataSource = self
         
-        tableView.register(ItemOptionCell.self, forCellReuseIdentifier: reuseIdentifier)
-        //tableView.backgroundColor = .darkGray
-        //tableView.separatorStyle = .none
-        //tableView.rowHeight = 80
+        tableView.register(ItemOptionCell.self, forCellReuseIdentifier: reuseItemIdentifier)
+        //itemsTableView.backgroundColor = .darkGray
+        //itemsTableView.separatorStyle = .none
+        tableView.rowHeight = 100
         
-        view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        view.addSubview(itemsTableView)
+        itemsTableView.translatesAutoresizingMaskIntoConstraints = false
+        itemsTableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        itemsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        itemsTableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        itemsTableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
     }
     
     func configureNavigationBar() {
