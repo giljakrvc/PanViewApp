@@ -58,6 +58,7 @@ class AddItemController: UIViewController{
         tf.placeholder = "Select category"
         tf.textAlignment = .left
         tf.layer.borderWidth = 0.5
+        tf.layer.borderColor = UIColor.lightGray.cgColor
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
@@ -67,6 +68,7 @@ class AddItemController: UIViewController{
         tf.placeholder = "Select category"
         tf.textAlignment = .left
         tf.layer.borderWidth = 0.5
+        tf.layer.borderColor = UIColor.lightGray.cgColor
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
@@ -77,6 +79,7 @@ class AddItemController: UIViewController{
         tf.textAlignment = .left
         tf.layer.masksToBounds = true
         tf.layer.borderWidth = 0.5
+        tf.layer.borderColor = UIColor.lightGray.cgColor
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
@@ -85,23 +88,25 @@ class AddItemController: UIViewController{
     let lblCategory: UILabel = {
            let label = UILabel()
            label.text = "Category:"
-           label.font = UIFont.systemFont(ofSize: 16 )
+           label.font = UIFont.boldSystemFont(ofSize: 16 )
            label.translatesAutoresizingMaskIntoConstraints = false
            return label
        }()
     
     let lblStore: UILabel = {
-              let label = UILabel()
-              label.text = "Selected Store (Profile):"
-              label.font = UIFont.systemFont(ofSize: 16 )
-              label.translatesAutoresizingMaskIntoConstraints = false
-              return label
-      }()
+        let label = UILabel()
+        label.text = "Selected Store (Profile)"
+        label.textAlignment = .justified
+        label.font = UIFont.boldSystemFont(ofSize: 18 )
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
     let lblSelectedStore: UILabel = {
         let label = UILabel()
         label.text = "Selected store:"
-        label.font = UIFont.systemFont(ofSize: 16 )
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 14 )
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -109,7 +114,7 @@ class AddItemController: UIViewController{
     let lblSubCategory: UILabel = {
            let label = UILabel()
            label.text = "Sub Category:"
-           label.font = UIFont.systemFont(ofSize: 16 )
+           label.font = UIFont.boldSystemFont(ofSize: 16 )
            label.translatesAutoresizingMaskIntoConstraints = false
            return label
        }()
@@ -117,14 +122,14 @@ class AddItemController: UIViewController{
     let lblNote: UILabel = {
            let label = UILabel()
            label.text = "Comment:"
-           label.font = UIFont.systemFont(ofSize: 16 )
+           label.font = UIFont.boldSystemFont(ofSize: 16 )
            label.translatesAutoresizingMaskIntoConstraints = false
            return label
        }()
     
     let btnTakePhoto: UIButton = {
         let btn = UIButton()
-        btn.setTitle("Pick Image", for: .normal)
+        btn.setTitle("Pick an Image", for: .normal)
         btn.setTitleColor(UIColor.systemBlue, for: UIControl.State.normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
@@ -149,10 +154,10 @@ class AddItemController: UIViewController{
         view.addSubview(photoImageView)
         view.addSubview(btnTakePhoto)
         
-        lblStore.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -85).isActive = true
+        lblStore.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
         lblStore.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -320).isActive = true
         
-        lblSelectedStore.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -25).isActive = true
+        lblSelectedStore.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
         lblSelectedStore.centerYAnchor.constraint(equalTo: lblStore.centerYAnchor, constant: 20).isActive = true
         
         lblCategory.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -138).isActive = true
@@ -161,13 +166,15 @@ class AddItemController: UIViewController{
         txtCategory.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         txtCategory.centerYAnchor.constraint(equalTo: lblCategory.centerYAnchor, constant: 20 ).isActive = true
         txtCategory.widthAnchor.constraint(equalToConstant: view.frame.width - 64).isActive = true
+        //txtCategory.addConstraint(txtCategory.heightAnchor.constraint(equalToConstant: 25))
                
         lblSubCategory.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -122).isActive = true
-        lblSubCategory.centerYAnchor.constraint(equalTo: txtCategory.centerYAnchor, constant: 30).isActive = true
+        lblSubCategory.centerYAnchor.constraint(equalTo: txtCategory.centerYAnchor, constant: 25).isActive = true
                
         txtSubCategory.centerXAnchor.constraint(equalTo: view.centerXAnchor ).isActive = true
         txtSubCategory.centerYAnchor.constraint(equalTo:  lblSubCategory.centerYAnchor , constant: 20).isActive = true
         txtSubCategory.widthAnchor.constraint(equalToConstant: view.frame.width - 64).isActive = true
+        //txtSubCategory.addConstraint(txtSubCategory.heightAnchor.constraint(equalToConstant: 25))
                
         lblNote.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -138).isActive = true
         lblNote.centerYAnchor.constraint(equalTo: txtSubCategory.centerYAnchor, constant: 30).isActive = true
@@ -175,8 +182,9 @@ class AddItemController: UIViewController{
         txtNote.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         txtNote.centerYAnchor.constraint(equalTo: lblNote.centerYAnchor, constant: 20).isActive = true
         txtNote.widthAnchor.constraint(equalToConstant: view.frame.width - 64).isActive = true
+        //txtNote.addConstraint(txtNote.heightAnchor.constraint(equalToConstant: 25))
         
-        btnTakePhoto.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -128).isActive = true
+        btnTakePhoto.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
         btnTakePhoto.centerYAnchor.constraint(equalTo: txtNote.centerYAnchor, constant: 40).isActive = true
         btnTakePhoto.widthAnchor.constraint(equalToConstant: view.frame.width - 64).isActive = true
         btnTakePhoto.addTarget(self, action: #selector(buttonClicked), for: .touchUpInside)

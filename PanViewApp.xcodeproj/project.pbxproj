@@ -25,6 +25,7 @@
 		EF258536238CD18F00971ADB /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF258535238CD18F00971ADB /* Protocols.swift */; };
 		EF29B778238E1C0100EE4694 /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF29B777238E1C0100EE4694 /* ProfileController.swift */; };
 		EF2D4C0723902C1000A982E7 /* AddItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2D4C0623902C1000A982E7 /* AddItemController.swift */; };
+		EF8D59CF2392FE8100B27CEB /* ViewItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8D59CE2392FE8100B27CEB /* ViewItemController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		EF258535238CD18F00971ADB /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		EF29B777238E1C0100EE4694 /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
 		EF2D4C0623902C1000A982E7 /* AddItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemController.swift; sourceTree = "<group>"; };
+		EF8D59CE2392FE8100B27CEB /* ViewItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewItemController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +116,7 @@
 				EF29B777238E1C0100EE4694 /* ProfileController.swift */,
 				EF2D4C0623902C1000A982E7 /* AddItemController.swift */,
 				EF0D0129239143AB0095DCD3 /* ImagePicker.swift */,
+				EF8D59CE2392FE8100B27CEB /* ViewItemController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -207,6 +210,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EF258510238CCE6800971ADB /* ViewController.swift in Sources */,
+				EF8D59CF2392FE8100B27CEB /* ViewItemController.swift in Sources */,
 				EF258533238CD17D00971ADB /* MenuController.swift in Sources */,
 				EF25852C238CD16700971ADB /* MenuOptionCell.swift in Sources */,
 				EF0D012A239143AB0095DCD3 /* ImagePicker.swift in Sources */,

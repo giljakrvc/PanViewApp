@@ -107,13 +107,18 @@ class HomeController: UITableViewController, UISearchResultsUpdating, UISearchBa
             return cell
             //
             
-          }
-          
+          }          
       }
       
-      override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
-      {
-          print("You selected cell #\((indexPath as NSIndexPath).row)")
+      override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+        let _item = itemArray[(indexPath as NSIndexPath).row]
+        
+        //Call ViewController
+        print("You selected cell #\((indexPath as NSIndexPath).row)")
+        let controller = ViewItemController()
+        controller.itemdb = _item
+        present(UINavigationController(rootViewController: controller), animated: true, completion: nil)
+            
       }
     
       override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
