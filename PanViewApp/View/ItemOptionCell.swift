@@ -46,6 +46,18 @@ class ItemOptionCell: UITableViewCell {
         return label
     }()
     
+    let createdAtLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 9)
+        label.text = "Created at"
+        label.textAlignment = .left
+        //label.layer.cornerRadius = 25
+        //label.layer.shadowOpacity = 0.7;
+        //label.layer.shadowRadius = 2;
+        return label
+    }()
+    
     // MARK: - Init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -76,8 +88,13 @@ class ItemOptionCell: UITableViewCell {
                 
         addSubview(categoryLabel)
         categoryLabel.translatesAutoresizingMaskIntoConstraints = false
-        categoryLabel.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 20).isActive = true
+        categoryLabel.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 15).isActive = true
         categoryLabel.leftAnchor.constraint(equalTo: pictureImageView.rightAnchor, constant: 12).isActive = true
+        
+        addSubview(createdAtLabel)
+        createdAtLabel.translatesAutoresizingMaskIntoConstraints = false
+        createdAtLabel.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 30).isActive = true
+        createdAtLabel.leftAnchor.constraint(equalTo: pictureImageView.rightAnchor, constant: 12).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

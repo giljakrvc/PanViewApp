@@ -80,6 +80,13 @@ class HomeController: UITableViewController, UISearchResultsUpdating, UISearchBa
                 cell.pictureImageView.image = image
                }
             }
+            
+            let dateFormatter = DateFormatter()
+           dateFormatter.dateFormat = "MMMM dd, yyyy"
+           let createdAt = _item.value(forKey: "createdat") as! Date?
+           let createdAtFormatted = dateFormatter.string(from: createdAt ?? Date())
+                      
+           cell.createdAtLabel.text = "Created at \(createdAtFormatted)"
             return cell
 
           }
@@ -104,6 +111,13 @@ class HomeController: UITableViewController, UISearchResultsUpdating, UISearchBa
                 cell.pictureImageView.image = image
                }
             }
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMMM dd, yyyy"
+            let createdAt = _item.value(forKey: "createdat") as! Date?
+            let createdAtFormatted = dateFormatter.string(from: createdAt ?? Date())
+                       
+            cell.createdAtLabel.text = "Created at \(createdAtFormatted)"
             return cell
             //
             
@@ -191,17 +205,26 @@ class HomeController: UITableViewController, UISearchResultsUpdating, UISearchBa
            let managedContext = (UIApplication.shared.delegate
                as! AppDelegate).persistentContainer.viewContext
            
-           //let fetchRequest = NSFetchRequest(entityName:"Contact")
-           let fetchRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Item")
-           let sort = NSSortDescriptor(key: "createdat", ascending: false)
-           fetchRequest.sortDescriptors = [sort]
+            //let fetchRequest = NSFetchRequest(entityName:"Contact")
+            let fetchRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Item")
+            let sort = NSSortDescriptor(key: "createdat", ascending: false)
+            fetchRequest.sortDescriptors = [sort]
+        
+            //Get the items created the las 24 hours
+            let twenty4HoursAgo = Date().addingTimeInterval(-86400)
+            let filterPredicate = NSPredicate(format: "createdat >= %@", twenty4HoursAgo as NSDate)
+            fetchRequest.predicate = filterPredicate
            
            //print(NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true).last!);
 
            do {
                let fetchedResults = try managedContext.fetch(fetchRequest) as? [NSManagedObject]
+            
                if let results = fetchedResults {
-                   itemArray = results
+                itemArray = results
+
+                //_ = (itemArray as NSArray).filtered(using: searchPredicate)
+                
                    self.tableView.reloadData()
                } else {
                    print("Could not fetch")

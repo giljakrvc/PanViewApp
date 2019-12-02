@@ -116,7 +116,7 @@ class ViewItemController: UIViewController{
         let label = UILabel()
         label.text = "Comment:"
         label.textAlignment = .justified
-        label.font = UIFont.boldSystemFont(ofSize: 18 )
+        label.font = UIFont.boldSystemFont(ofSize: 12 )
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -176,8 +176,8 @@ class ViewItemController: UIViewController{
         //lblSelectedSubCategory.widthAnchor.constraint(equalToConstant: view.frame.width - 64).isActive = true
         //lblSelectedSubCategory.addConstraint(txtSubCategory.heightAnchor.constraint(equalToConstant: 25))
         
-        //lblCreatedAt.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
-        //lblCreatedAt.centerYAnchor.constraint(equalTo: lblSelectedCategory.centerYAnchor, constant: 30).isActive = true
+        lblCreatedAt.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
+        lblCreatedAt.centerYAnchor.constraint(equalTo: lblSelectedCategory.centerYAnchor, constant: 30).isActive = true
       
                 
         if let _item = itemdb {
@@ -187,8 +187,13 @@ class ViewItemController: UIViewController{
             lblSelectedCategory.text = _item.value(forKey: "category") as! String?
             //
             lblSelectedSubCategory.text = _item.value(forKey: "subcategory") as! String?
-            //lblCreatedAt.text = _item.value(forKey: "createdat") as! String?
             
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMMM d yyyy, hh:mm"
+            let createdAt = _item.value(forKey: "createdat") as! Date?
+            let createdAtFormatted = dateFormatter.string(from: createdAt ?? Date())
+            
+            lblCreatedAt.text = "Created at \(createdAtFormatted)"
                      
             photoImageView.image = storeImageView.image
             
